@@ -1,0 +1,11 @@
+---
+- name: set Juniper router banner
+  hosts: rtr3
+  gather_facts: no
+
+  tasks:
+
+    - name: add the junos banner
+      junos_banner:
+        text: "{{ net_banner | default(None) }}"
+        banner: "{{ net_type | default('login') }}"
