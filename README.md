@@ -22,3 +22,53 @@ Please refer to rollowing links for more information and perscriptive exercises:
 - [network.toolkit.restore](roles/restore/README.md)
 - [network.toolkit.system](roles/system/README.md)
 - [network.toolkit.user](roles/user/README.md)
+
+# Sample inventory
+
+[routers:vars]
+ansible_user=ec2-user
+
+[routers:children]
+cisco
+juniper
+arista
+
+[cisco]
+rtr1 ansible_host=3.17.78.88 private_ip=172.16.200.186
+[arista]
+rtr2 ansible_host=3.144.106.81 private_ip=172.18.43.182
+rtr4 ansible_host=52.15.213.42 private_ip=172.18.237.32
+[juniper]
+rtr3 ansible_host=3.15.149.178 private_ip=172.16.244.89
+
+[cisco:vars]
+ansible_network_os=ios
+ansible_connection=network_cli
+
+[juniper:vars]
+ansible_network_os=junos
+ansible_connection=netconf
+
+[arista:vars]
+ansible_network_os=eos
+ansible_connection=network_cli
+ansible_become=true
+ansible_become_method=enable
+
+[dc1]
+rtr1
+rtr3
+
+[dc2]
+rtr2
+rtr4
+
+[control]
+ansible-1 ansible_host=18.117.158.14 ansible_user=ec2-user private_ip=172.16.2.57
+
+[network:children]
+routers
+[network:vars]
+restore_inventory="Workshop Inventory"
+restore_credential="Workshop Credential"
+restore_project="Workshop Project"
